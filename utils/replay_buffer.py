@@ -38,7 +38,7 @@ class ReplayBuffer(object):
         )
 
     def is_full(self):
-	    return self.size == self.capacity
+        return self.size == self.capacity
 
 
 if __name__ == "__main__":
