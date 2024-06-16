@@ -1,6 +1,14 @@
 import torch
 import torch.nn as nn
 
+class DummyNetwork(torch.nn.Module):
+    def __init__(self, input_dim=4, output_dim=2):
+        super(DummyNetwork, self).__init__()
+        self.fc = torch.nn.Linear(input_dim, output_dim)
+
+    def forward(self, x):
+        return self.fc(x)
+
 class QNetwork(nn.Module):
 
     def __init__(self, state_size, action_size, fc1_units=64, fc2_units=64):

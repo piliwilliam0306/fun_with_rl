@@ -14,19 +14,12 @@ def soft_update(local_model, target_model, tau=1):
         target_param.data.copy_(tau*local_param.data + (1.0-tau)*target_param.data)
 
 if __name__ == "__main__":
-    import torch.nn as nn
+    from model import DummyNetwork
+    import torch
 
-    class SimpleNet(nn.Module):
-        def __init__(self):
-            super(SimpleNet, self).__init__()
-            self.fc1 = nn.Linear(2, 2)
-
-        def forward(self, x):
-            x = self.fc1(x)
-            return x
-
-    local_model = SimpleNet()
-    target_model = SimpleNet()
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    local_model = DummyNetwork().to(device)
+    target_model = DummyNetwork().to(device)
 
     print("Initial weights of target model:")
     for param in target_model.parameters():

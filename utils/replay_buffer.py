@@ -3,7 +3,11 @@ import torch
 
 
 class ReplayBuffer(object):
-    def __init__(self, state_dim, action_dim, capacity=int(1e6)):
+    def __init__(self,
+                 state_dim,
+                 action_dim,
+                 capacity=int(1e6),
+                 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")):
         self.capacity = capacity
         self.ptr = 0
         self.size = 0
@@ -12,7 +16,7 @@ class ReplayBuffer(object):
         self.next_state = np.zeros((capacity, state_dim))
         self.reward = np.zeros((capacity, 1))
         self.done = np.zeros((capacity, 1))
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.device = device
 
     def push(self, state, action, next_state, reward, done):
         self.state[self.ptr] = state
