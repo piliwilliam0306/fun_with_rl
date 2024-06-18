@@ -11,7 +11,7 @@ class DummyNetwork(torch.nn.Module):
 
 class QNetwork(nn.Module):
 
-    def __init__(self, state_size, action_size, fc1_units=64, fc2_units=64):
+    def __init__(self, state_size, action_size, fc1_units=128, fc2_units=128):
         super(QNetwork, self).__init__()
         self.fc1 = nn.Linear(state_size, fc1_units)
         self.fc2 = nn.Linear(fc1_units, fc2_units)
