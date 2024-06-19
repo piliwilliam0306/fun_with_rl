@@ -50,11 +50,13 @@ def train_dqn(episodes=2000, max_t=500, gamma=0.99, tau=0.005, lr=1e-4, update_e
                 experiences = replay_buffer.sample(batch_size)
                 states, actions, next_states, rewards, dones = experiences
 
-                # Get expected Q values from local model
+                # Get expected Q values corresponding to the chosen actions for each state from local model
+                # [128, 4] -> [128, 2] -> [128, 1]
                 q_values = qnetwork_local(states).gather(1, actions)
 
                 # Get max predicted Q values from target model
-                q_targets_next = qnetwork_target(next_states).detach().max(1)[0].unsqueeze(1)
+                # [128, 4] -> [128, 2] -> [128] -> [128, 1]
+                q_targets_next = qnetwork_target(next_states).detach().max(1).values.unsqueeze(1)
 
                 # Compute Q targets for current states
                 q_targets = rewards + (gamma * q_targets_next * (1 - dones))
@@ -110,7 +112,7 @@ def test_dqn(record_video=False):
 
 def main():
     parser = argparse.ArgumentParser(description='Train or test a DQN model on CartPole-v1')
-    parser.add_argument('--mode', choices=['train', 'test'], help='Mode to run: train or test')
+    parser.add_argument('--mode', choices=['train', 'test'], default='train', help='Mode to run: train or test')
     args = parser.parse_args()
 
     if args.mode == 'train':
